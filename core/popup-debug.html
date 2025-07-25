@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Renewal Falcon Proxy Debug</title>
+    <style>
+        body {
+            width: 300px;
+            height: 200px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <h3>Falcon Proxy Debug</h3>
+    <div id="status">Loadings...</div>
+    <div id="errors"></div>
+    
+    <script>
+        console.log('Popup script loading...');
+        
+        function updateStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = isError ? 'status error' : 'status success';
+        }
+        
+        function logError(error) {
+            console.error('Error:', error);
+            const errorsDiv = document.getElementById('errors');
+            const errorElement = document.createElement('div');
+            errorElement.textContent = error.toString();
+            errorElement.className = 'status error';
+            errorsDiv.appendChild(errorElement);
+        }
+        
+        // Check Default Chrome API
+        if (typeof chrome === 'undefined') {
+            logError('Chrome API not available');
+            updateStatus('No Chrome API', true);
+        } else {
+            updateStatus('Chrome API enabled');
+            console.log('Chrome API available');
+        }
+        
+        // Check Proxy API
+        if (chrome && chrome.proxy) {
+            updateStatus('Proxy API enabled');
+            console.log('Proxy API available');
+        } else {
+            logError('Proxy API not available');
+            updateStatus('No Proxy API', true);
+        }
+        
+        // Connection Test with Background Script
+        if (chrome && chrome.runtime) {
+            chrome.runtime.sendMessage({msg: "update_status"}, function(response) {
+                if (chrome.runtime.lastError) {
+                    logError('Background script communication error: ' + chrome.runtime.lastError.message);
+                } else {
+                    updateStatus('Success Backgrond Script Connection');
+                    console.log('Background response:', response);
+                }
+            });
+        }
+        
+        // Error Listner 
+        window.addEventListener('error', function(e) {
+            logError('Global error: ' + e.message);
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            updateStatus('DOM Load Complete');
+        });
+    </script>
+</body>
+</html>
