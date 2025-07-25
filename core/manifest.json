@@ -1,27 +1,44 @@
 {
-  "manifest_version": 2,
-  "name": "Falcon Proxy",
-  "description": "Falcon Proxy. Simple, clear and easy to use.",
-  "version": "0.6.9",
-  "default_locale": "en",
-  "update_url": "https://api.0x110.com/ssledge-chrome-updates.xml",
-  "browser_action": {
-    "default_icon": "image/icon_mono_off.png",
-    "default_popup": "popup.html"
-  },
-	"background": {
-	  "scripts": ["scripts/background.js"]
-	},
-  "sandbox": {
-    "pages": ["sandbox.html"]
-  },
-  "icons": {
-    "24": "image/icon_mono_on.png",
-    "128": "image/icon_128.png"
-  },
-  "permissions": [
-    "<all_urls>",
-    "notifications",
-    "proxy"
-  ]
+   "manifest_version": 3,
+   "name": "Renewal Falcon Proxy (With Pentest)",
+   "description": "A modernized proxy extension for penetration testing and security assessments",
+   "version": "2.0.0",
+   
+   "background": {
+      "service_worker": "background.js"
+   },
+   
+   "action": {
+      "default_icon": {
+         "16": "assets/images/icon_mono_off.png",
+         "19": "assets/images/icon_mono_off.png",
+         "24": "assets/images/icon_mono_off.png",
+         "32": "assets/images/icon_mono_off.png",
+         "38": "assets/images/icon_mono_off.png"
+      },
+      "default_popup": "simple-popup.html",
+      "default_title": "Falcon Proxy"
+   },
+   
+   "icons": {
+      "16": "assets/images/icon_mono_off.png",
+      "24": "assets/images/icon_mono_on.png",
+      "32": "assets/images/icon_mono_off.png",
+      "48": "assets/images/icon_mono_off.png",
+      "128": "assets/images/icon_128.png",
+      "512": "assets/images/icon_512.png"
+   },
+   
+   "permissions": [
+      "proxy",
+      "storage"
+   ],
+   
+   "host_permissions": [
+      "<all_urls>"
+   ],
+   
+   "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
+   }
 }
