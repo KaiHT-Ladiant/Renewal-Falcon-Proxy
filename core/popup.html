@@ -1,223 +1,263 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link
-      type="text/css"
-      rel="stylesheet"
-      media="all"
-      href="styles/mochi.css"
-    />
-    <link
-      type="text/css"
-      rel="stylesheet"
-      media="all"
-      href="styles/style.css"
-    />
-    <style>
-      body {
-        width: 357px;
-        display: block;
-      }
-    </style>
-    <script type="text/javascript" src="scripts/jquery.js"></script>
-    <script type="text/javascript" src="scripts/spine.js"></script>
-    <script type="text/javascript" src="scripts/spine.local.js"></script>
-    <script type="text/javascript" src="scripts/base64.js"></script>
-    <script type="text/javascript" src="scripts/mochi.js"></script>
+// popup.js - Renewal Falcon Proxy Popup Script
 
-    <script type="text/javascript" src="scripts/logging.js"></script>
-    <script type="text/javascript" src="scripts/sandbox.js"></script>
-    <script type="text/javascript" src="scripts/agent.js"></script>
-    <script type="text/javascript" src="scripts/model.js"></script>
+let proxyEnabled = false;
+let currentSettings = {
+    type: 'http',
+    host: '127.0.0.1',
+    port: 8080,
+    useAuth: false,
+    username: '',
+    password: ''
+};
 
-    <script type="text/javascript" src="scripts/profile_list.js"></script>
-    <script type="text/javascript" src="scripts/profile_detail.js"></script>
-    <script type="text/javascript" src="scripts/popup.js"></script>
-  </head>
-  <body>
-    <div id="container">
-      <div id="info" class="prompt"></div>
-      <div id="error" class="prompt"></div>
-      <div id="profile_list_page" class="page">
-        <ul class="mochi_list">
-          <li class="mochi_list_item">
-            <input
-              id="proxy_switch"
-              class="mochi_toggle widget"
-              type="checkbox"
-            />
-            <label class="label">Turn On/Off</label>
-          </li>
-        </ul>
-        <ul id="profile_list" class="mochi_list">
-          <li class="mochi_list_item with_trigger add">
-            <a id="add_proxy_button" class="trigger">
-              <span class="widget more"></span>
-              <label class="label">Add ...</label>
-            </a>
-          </li>
-        </ul>
-        <p style="text-align: right">
-          <input
-            id="speed_test_button"
-            type="button"
-            class="mochi_button round"
-            value="Test Speed"
-          />
-        </p>
-        <div style="background: #ddd; padding: 4px 10px; border-radius: 6px">
-          <a
-            style="color: #555; font-size: 12px; text-decoration: none"
-            href="https://www.fox.one"
-            >FoxOne: Best Crypto Assets App from Falcon
-            <span>Learn more</span>
-          </a>
-        </div>
-      </div>
-      <!-- #profile_page -->
-      <div id="profile_detail_page" class="page">
-        <input type="hidden" class="action_id" value="edit" />
-        <ul class="mochi_list">
-          <li class="mochi_list_item">
-            <input
-              type="text"
-              id="proxy_name_entry"
-              class="mochi_entry widget proxy_name_entry"
-            />
-            <label for="proxy_name_entry" class="label">Name</label>
-          </li>
-        </ul>
-        <ul class="mochi_button_group round proxy_type_button_group">
-          <li>
-            <a href="#off" class="mochi_button_group_item selected" name="type"
-              >Off</a
-            >
-          </li>
-          <li>
-            <a href="#system" class="mochi_button_group_item" name="type"
-              >System</a
-            >
-          </li>
-          <li>
-            <a href="#auto" class="mochi_button_group_item" name="type">Auto</a>
-          </li>
-          <li>
-            <a href="#manual" class="mochi_button_group_item" name="type"
-              >Manual</a
-            >
-          </li>
-        </ul>
-        <div class="off_proxy_block block">
-          <ul class="mochi_list">
-            <li class="mochi_list_item">
-              <label class="label">Connect to the Internet directly.</label>
-            </li>
-          </ul>
-        </div>
-        <div class="system_proxy_block block">
-          <ul class="mochi_list">
-            <li class="mochi_list_item">
-              <label class="label">Use System proxy settings.</label>
-            </li>
-          </ul>
-        </div>
-        <div class="auto_proxy_block block">
-          <ul class="mochi_list">
-            <li class="mochi_list_item">
-              <input
-                type="text"
-                placeholder="pac file here"
-                class="mochi_entry widget pac_url_entry"
-              />
-              <label class="label">URL</label>
-            </li>
-          </ul>
-        </div>
-        <div class="manual_proxy_block block">
-          <ul class="mochi_list">
-            <li class="mochi_list_item">
-              <select class="mochi_combo widget scheme_combo" name="">
-                <option value="http">HTTP Proxy</option>
-                <option value="https">HTTPS Proxy</option>
-                <option value="socks4">SOCKS v4 Proxy</option>
-                <option value="socks5">SOCKS v5 Proxy</option>
-              </select>
-              <label class="label">Proxy Type</label>
-            </li>
-            <li class="mochi_list_item">
-              <input
-                type="text"
-                placeholder="e.g. 127.0.0.1"
-                class="mochi_entry widget host_entry"
-              />
-              <label class="label">Host</label>
-            </li>
-            <li class="mochi_list_item">
-              <input
-                type="text"
-                placeholder="e.g. 8080"
-                class="mochi_entry widget port_entry"
-              />
-              <label class="label">Port</label>
-            </li>
-            <li class="mochi_list_item" style="height: 60px">
-              <textarea
-                type="text"
-                placeholder="e.g. *.qq.com"
-                class="mochi_textarea widget bypass_entry"
-              ></textarea>
-              <label class="label">Bypass</label>
-            </li>
-            <!--
-					<li class="mochi_list_item">
-						<input type="checkbox" class="mochi_toggle widget auth_proxy_toggle"/>
-						<label class="label">Authentication</label>
-					</li> -->
-          </ul>
-        </div>
-        <!-- manual_proxy_block -->
-        <div class="block auth_proxy_block">
-          <ul class="mochi_list">
-            <li class="mochi_list_item">
-              <input type="text" class="mochi_entry widget username_entry" />
-              <label class="label">Username</label>
-            </li>
-            <li class="mochi_list_item">
-              <input type="text" class="mochi_entry widget password_entry" />
-              <label class="label">Password</label>
-            </li>
-          </ul>
-        </div>
-        <!-- auth_proxy_block -->
-        <p>
-          <input
-            type="button"
-            class="mochi_button round red detail_delete_button"
-            value="Delete"
-          />
-          <input
-            type="button"
-            class="mochi_button round blue detail_save_button"
-            style="float: right"
-            value="Save"
-          />
-          <input
-            type="button"
-            class="mochi_button round detail_cancel_button"
-            style="float: right"
-            value="Cancel"
-          />
-        </p>
-      </div>
-      <!-- #detail_page -->
-    </div>
-  </body>
-  <iframe
-    id="sandbox"
-    src="sandbox.html"
-    width="0"
-    height="0"
-    style="display: none"
-  ></iframe>
-</html>
+// Update Debug Information
+function updateDebugInfo(message) {
+    const debugElement = document.getElementById('debugInfo');
+    if (debugElement) {
+        debugElement.textContent = message;
+    }
+    console.log('Debug:', message);
+}
+
+// Update Status
+function updateStatus(enabled) {
+    const toggle = document.getElementById('proxyToggle');
+    const status = document.getElementById('statusText');
+    
+    if (toggle) toggle.checked = enabled;
+    if (status) status.textContent = enabled ? 'Proxy Enabled' : 'Proxy Unabled';
+    
+    proxyEnabled = enabled;
+    updateDebugInfo(`상태 변경: ${enabled ? 'Active' : 'Deactivate'}`);
+}
+
+// Save Settings
+function saveSettings() {
+    const type = document.getElementById('proxyType').value;
+    const host = document.getElementById('proxyHost').value.trim();
+    const port = parseInt(document.getElementById('proxyPort').value);
+    const useAuth = document.getElementById('useAuth').checked;
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    
+    // Check Valiable
+    if (!host) {
+        alert('Input Proxy Address.');
+        return;
+    }
+    
+    if (!port || port < 1 || port > 65535) {
+        alert('A valid port number is required. (1-65535)');
+        return;
+    }
+    
+    if (useAuth && (!username || !password)) {
+        alert('Please enter your username and password to use authentication.');
+        return;
+    }
+    
+    // Save Settings 
+    currentSettings = { type, host, port, useAuth, username, password };
+    
+    // Save in Chrome storage
+    if (chrome && chrome.storage) {
+        chrome.storage.local.set({ proxySettings: currentSettings }, function() {
+            if (chrome.runtime.lastError) {
+                updateDebugInfo('Failed save settings: ' + chrome.runtime.lastError.message);
+            } else {
+                updateDebugInfo('Save Settings Value Allready설정이 저장되었습니다.');
+                
+                // If Proxy is Activated, Use New Settings Value
+                if (proxyEnabled) {
+                    enableProxy();
+                }
+            }
+        });
+    }
+}
+
+// Load Settings
+function loadSettings() {
+    if (chrome && chrome.storage) {
+        chrome.storage.local.get(['proxySettings'], function(result) {
+            if (result.proxySettings) {
+                currentSettings = result.proxySettings;
+                
+                // Apply UI Settings
+                document.getElementById('proxyType').value = currentSettings.type;
+                document.getElementById('proxyHost').value = currentSettings.host;
+                document.getElementById('proxyPort').value = currentSettings.port;
+                document.getElementById('useAuth').checked = currentSettings.useAuth;
+                document.getElementById('username').value = currentSettings.username || '';
+                document.getElementById('password').value = currentSettings.password || '';
+                
+                // Display/Hide Auth Settings
+                toggleAuthSettings();
+                
+                updateDebugInfo('Imported saved settings.');
+            } else {
+                updateDebugInfo('Use the default settings.');
+            }
+        });
+    }
+}
+
+// AnthSettings Display/Hide
+function toggleAuthSettings() {
+    const useAuth = document.getElementById('useAuth').checked;
+    const authSettings = document.getElementById('authSettings');
+    if (authSettings) {
+        authSettings.style.display = useAuth ? 'block' : 'none';
+    }
+}
+
+// Proxy Toggle
+function toggleProxy() {
+    const newState = !proxyEnabled;
+    updateDebugInfo(`Try Proxy Toggle: ${newState ? 'Activated' : 'Deactivated'}`);
+    
+    if (newState) {
+        enableProxy();
+    } else {
+        disableProxy();
+    }
+}
+
+// Activate Proxy
+function enableProxy() {
+    updateDebugInfo('Enabling proxy...');
+    
+    const config = {
+        mode: 'fixed_servers',
+        rules: {
+            singleProxy: {
+                scheme: currentSettings.type,
+                host: currentSettings.host,
+                port: currentSettings.port
+            }
+        }
+    };
+    
+    if (chrome && chrome.proxy) {
+        chrome.proxy.settings.set({
+            value: config,
+            scope: 'regular'
+        }, function() {
+            if (chrome.runtime.lastError) {
+                updateDebugInfo('ProxySettings Failed: ' + chrome.runtime.lastError.message);
+                updateStatus(false);
+            } else {
+                updateDebugInfo(`Proxy Activate Complete: ${currentSettings.type}://${currentSettings.host}:${currentSettings.port}`);
+                updateStatus(true);
+                notifyBackground('set_icon', 'on');
+            }
+        });
+    } else {
+        updateDebugInfo('Proxy API unavailable');
+        updateStatus(false);
+    }
+}
+
+// Proxy Deactivated
+function disableProxy() {
+    updateDebugInfo('Deactivating proxy...');
+    
+    if (chrome && chrome.proxy) {
+        chrome.proxy.settings.clear({scope: 'regular'}, function() {
+            if (chrome.runtime.lastError) {
+                updateDebugInfo('Failed to release proxy: ' + chrome.runtime.lastError.message);
+            } else {
+                updateDebugInfo('Proxy Disabled Complete');
+                updateStatus(false);
+                notifyBackground('set_icon', 'off');
+            }
+        });
+    } else {
+        updateDebugInfo('Proxy API unavailable');
+        updateStatus(false);
+    }
+}
+
+// Alert Background Script
+function notifyBackground(action, value) {
+    if (chrome && chrome.runtime) {
+        chrome.runtime.sendMessage({
+            msg: action,
+            name: value
+        }, function(response) {
+            if (chrome.runtime.lastError) {
+                updateDebugInfo('Background communication failure: ' + chrome.runtime.lastError.message);
+            }
+        });
+    }
+}
+
+// Check current proxy status
+function checkCurrentStatus() {
+    updateDebugInfo('Checking the current proxy status...');
+    
+    if (chrome && chrome.proxy) {
+        chrome.proxy.settings.get({incognito: false}, function(config) {
+            if (chrome.runtime.lastError) {
+                updateDebugInfo('Status Check Failed: ' + chrome.runtime.lastError.message);
+                updateStatus(false);
+            } else {
+                const isEnabled = config.value && 
+                                config.value.mode !== 'direct' && 
+                                config.levelOfControl === 'controlled_by_this_extension';
+                updateDebugInfo(`Current Status: ${config.value ? config.value.mode : 'direct'}`);
+                updateStatus(isEnabled);
+            }
+        });
+    } else {
+        updateDebugInfo('Chrome Proxy API unavailable');
+        updateStatus(false);
+    }
+}
+
+// Event Listener Settings 
+function setupEventListeners() {
+    const proxyToggle = document.getElementById('proxyToggle');
+    if (proxyToggle) {
+        proxyToggle.addEventListener('change', toggleProxy);
+    }
+    
+    const saveBtn = document.getElementById('saveSettings');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveSettings);
+    }
+    
+    const useAuthCheckbox = document.getElementById('useAuth');
+    if (useAuthCheckbox) {
+        useAuthCheckbox.addEventListener('change', toggleAuthSettings);
+    }
+}
+
+// Initialization
+function initializePopup() {
+    updateDebugInfo('Start Popup Initialization팝업 초기화 시작');
+    
+    // Check Chrome API
+    if (typeof chrome === 'undefined') {
+        updateDebugInfo('Chrome API disabled');
+        return;
+    } else {
+        updateDebugInfo('Chrome API enabled');
+    }
+    
+    // Event Listner Settings
+    setupEventListeners();
+    
+    // Load saved settings
+    loadSettings();
+    
+    // Check initial status
+    setTimeout(checkCurrentStatus, 100);
+}
+
+// Initialize upon completion of DOM load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePopup);
+} else {
+    initializePopup();
+}
