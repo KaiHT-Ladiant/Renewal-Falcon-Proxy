@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Renewal Falcon Proxy</title>
+    <style>
+        body {
+            width: 375px;
+            height: 400px;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #ededed;
+            box-sizing: border-box;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .toggle-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .status {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .profiles {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .setting-group {
+            margin-bottom: 15px;
+        }
+        
+        .setting-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .setting-group input[type="text"],
+        .setting-group input[type="number"],
+        .setting-group input[type="password"],
+        .setting-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .setting-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .save-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+        
+        .save-btn:hover {
+            background: #45a049;
+        }
+        
+        .debug-info {
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            max-height: 60px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Falcon Proxy</h2>
+    </div>
+    
+    <div class="toggle-container">
+        <div class="toggle-switch">
+            <span>Proxy Activated</span>
+            <label class="switch">
+                <input type="checkbox" id="proxyToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="status" id="statusText">Proxy Deactivated</div>
+    </div>
+    
+    <div class="profiles">
+        <h3>Proxy Settings</h3>
+        
+        <!-- Select Proxy Type -->
+        <div class="setting-group">
+            <label>Porxy Type:</label>
+            <select id="proxyType">
+                <option value="http">HTTP</option>
+                <option value="https">HTTPS</option>
+                <option value="socks4">SOCKS4</option>
+                <option value="socks5">SOCKS5</option>
+            </select>
+        </div>
+        
+        <!-- Proxy Address -->
+        <div class="setting-group">
+            <label>Proxy Address:</label>
+            <input type="text" id="proxyHost" placeholder="Ex: 127.0.0.1" value="127.0.0.1">
+        </div>
+        
+        <!-- Proxy Port -->
+        <div class="setting-group">
+            <label>Port:</label>
+            <input type="number" id="proxyPort" placeholder="Ex: 8080" value="8080" min="1" max="65535">
+        </div>
+        
+        <!-- Authtication Settings -->
+        <div class="setting-group">
+            <label>
+                <input type="checkbox" id="useAuth"> Use Authtication
+            </label>
+        </div>
+        
+        <div id="authSettings" style="display: none;">
+            <div class="setting-group">
+                <label>Users:</label>
+                <input type="text" id="username" placeholder="Username">
+            </div>
+            <div class="setting-group">
+                <label>Password:</label>
+                <input type="password" id="password" placeholder="Password">
+            </div>
+        </div>
+        
+        <!-- Save Button -->
+        <div class="setting-group">
+            <button type="button" id="saveSettings" class="save-btn">Save Settings</button>
+        </div>
+    </div>
+    
+    <div class="debug-info" id="debugInfo">
+        Initializing...
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
