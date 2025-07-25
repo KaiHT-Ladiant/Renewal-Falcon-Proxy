@@ -1,44 +1,20 @@
 {
-   "manifest_version": 3,
-   "name": "Renewal Falcon Proxy (With Pentest)",
-   "description": "A modernized proxy extension for penetration testing and security assessments",
-   "version": "2.0.0",
-   
-   "background": {
-      "service_worker": "background.js"
-   },
-   
-   "action": {
-      "default_icon": {
-         "16": "assets/images/icon_mono_off.png",
-         "19": "assets/images/icon_mono_off.png",
-         "24": "assets/images/icon_mono_off.png",
-         "32": "assets/images/icon_mono_off.png",
-         "38": "assets/images/icon_mono_off.png"
-      },
-      "default_popup": "simple-popup.html",
-      "default_title": "Falcon Proxy"
-   },
-   
-   "icons": {
+  "manifest_version": 3,
+  "name": "Renewal Falcon Proxy (With Pentest)",
+  "version": "2.0.0",
+  "description": "A modernized proxy extension for penetration testing and security assessments",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": {
       "16": "assets/images/icon_mono_off.png",
-      "24": "assets/images/icon_mono_on.png",
+      "19": "assets/images/icon_mono_off.png",
+      "24": "assets/images/icon_mono_off.png",
       "32": "assets/images/icon_mono_off.png",
-      "48": "assets/images/icon_mono_off.png",
-      "128": "assets/images/icon_128.png",
-      "512": "assets/images/icon_512.png"
-   },
-   
-   "permissions": [
-      "proxy",
-      "storage"
-   ],
-   
-   "host_permissions": [
-      "<all_urls>"
-   ],
-   
-   "content_security_policy": {
-      "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
-   }
+      "38": "assets/images/icon_mono_off.png"
+    },
+    "default_popup": "simple-popup.html",
+    "default_title": "Renewal Falcon Proxy (With Pentest)"
+  }
 }
